@@ -16,12 +16,25 @@ public class EvenementArriveePassagerPalier extends Evenement {
     }
 
     public void traiter(Immeuble immeuble, Echeancier echeancier) {
-	assert étage != null;
-	assert immeuble.étage(étage.numéro()) == étage;
-	Passager p = new Passager(date, étage, immeuble);
+		assert étage != null;
+		assert immeuble.étage(étage.numéro()) == étage;
+		Passager p = new Passager(date, étage, immeuble);
 
-	notYetImplemented();
-	
+
+		Cabine c = immeuble.cabine;
+
+		if(c.intention()=='-'){
+            c.changerIntention(p.sens());
+            if (c.faireMonterPassager(p)) {
+                long ancienneDate = this.date;
+                this.date = this.date +étage.arrivéeSuivante();
+                echeancier.ajouter(this);
+                EvenementFermeturePorteCabine fpc = new EvenementFermeturePorteCabine(ancienneDate+Global.tempsPourEntrerOuSortirDeLaCabine+Global.tempsPourOuvrirOuFermerLesPortes);
+                echeancier.ajouter(fpc);
+            }
+        }else {
+		    notYetImplemented();
+        }
     }
 
 }

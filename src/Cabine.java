@@ -52,30 +52,30 @@ public class Cabine extends Global {
     }
 
     public char intention() {
-	assert (intention == '-') || (intention == 'v') || (intention == '^');
-	return intention;
+		assert (intention == '-') || (intention == 'v') || (intention == '^');
+		return intention;
     }
 
     public void changerIntention(char s){
-	assert (s == '-') || (s == 'v') || (s == '^');
-	intention = s;
+		assert (s == '-') || (s == 'v') || (s == '^');
+		intention = s;
     }
 
     public boolean faireMonterPassager(Passager p) { 
-	assert p != null;
-	assert ! transporte(p);
-	if (modeParfait) {
-	    if (intention != p.sens()) {
+		assert p != null;
+		assert ! transporte(p);
+		if (modeParfait) {
+			if (intention != p.sens()) {
+				return false;
+			}
+		}
+		for (int i=0 ; i<tableauPassager.length ; i++) {
+			if(tableauPassager[i]==null){
+				tableauPassager[i]=p;
+				return true;
+			}
+		}
 		return false;
-	    }
-	}
-	for (int i=0 ; i<tableauPassager.length ; i++) {
-	    if(tableauPassager[i]==null){
-		tableauPassager[i]=p;
-		return true;
-	    }
-	}
-	return false;
     }
 
     public int faireDescendrePassagers(Immeuble immeuble,long d){
