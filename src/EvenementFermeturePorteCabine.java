@@ -22,7 +22,7 @@ public class EvenementFermeturePorteCabine extends Evenement {
         Etage etage = cabine.étage;
         Etage e;
         if (immeuble.cabine.intention() == '^'){
-            e = immeuble.étage(etage.numéro() - 1);
+            e = immeuble.étage(etage.numéro() + 1);
         }else if (immeuble.cabine.intention() == 'v'){
             e = immeuble.étage(etage.numéro() - 1);
         }else{
