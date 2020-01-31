@@ -40,9 +40,9 @@ public class Global {
        réellement utilisé par les tests.
     */
     public static void notYetImplemented () {
-	assert false : "notYetImplemented";
-	String s = null;
-	s.charAt(0); // Pour forcer le plantage si assert n'est pas en service.
+        assert false : "notYetImplemented";
+        String s = null;
+        s.charAt(0); // Pour forcer le plantage si assert n'est pas en service.
     }
 
 }

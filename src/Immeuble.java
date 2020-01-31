@@ -17,13 +17,13 @@ public class Immeuble extends Global {
     public long nombreTotalDesPassagersSortis = 0;
 
     public Etage étageLePlusBas() {
-	Etage res = tableauDesEtages[0];
+	    Etage res = tableauDesEtages[0];
         assert res != null;
         return res ;
     }
 
     public Etage étageLePlusHaut() {
-	Etage res = tableauDesEtages[tableauDesEtages.length - 1];
+	    Etage res = tableauDesEtages[tableauDesEtages.length - 1];
         assert res != null;
         return res;
     }
@@ -35,29 +35,29 @@ public class Immeuble extends Global {
     }
 
     public Immeuble(Echeancier echeancier) {
-	Etage e = null;
-        tableauDesEtages = new Etage[9];
-        int n = -1;
-        for (int i = 0; i < tableauDesEtages.length; i++) {
-            int fa = 41; // Pour le niveau 0 en dixieme de secondes:
-            if (n != 0) {
-                fa = fa * (tableauDesEtages.length - 1);
+        Etage e = null;
+            tableauDesEtages = new Etage[9];
+            int n = -1;
+            for (int i = 0; i < tableauDesEtages.length; i++) {
+                int fa = 41; // Pour le niveau 0 en dixieme de secondes:
+                if (n != 0) {
+                    fa = fa * (tableauDesEtages.length - 1);
+                }
+            e = new Etage(n, fa, this);
+            tableauDesEtages[i] = e;
+                if (n == 0) {
+                    niveauDuSol = e;
+                }
+                n++;
             }
-	    e = new Etage(n, fa, this);
-	    tableauDesEtages[i] = e;
-            if (n == 0) {
-                niveauDuSol = e;
+            for (int i = 0; i < tableauDesEtages.length; i++) {
+                Etage etage = tableauDesEtages[i];
+                long date = etage.arrivéeSuivante();
+                echeancier.ajouter(new EvenementArriveePassagerPalier(date, etage));
             }
-            n++;
-        }
-        for (int i = 0; i < tableauDesEtages.length; i++) {
-            Etage etage = tableauDesEtages[i];
-            long date = etage.arrivéeSuivante();
-            echeancier.ajouter(new EvenementArriveePassagerPalier(date, etage));
-        }
-	e = étageLePlusHaut();
-        cabine = new Cabine(niveauDuSol());
-	e = étage(e.numéro() - 1);
+        e = étageLePlusHaut();
+            cabine = new Cabine(niveauDuSol());
+        e = étage(e.numéro() - 1);
     }
 
     public void affiche(StringBuilder buffer) {

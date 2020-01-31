@@ -21,7 +21,16 @@ public class EvenementPassageCabinePalier extends Evenement {
 	assert ! cabine.porteOuverte;
 	assert étage.numéro() != cabine.étage.numéro();
 
-	notYetImplemented();
+	cabine.étage = étage;
+	long dateouvrirporte =this.date + this.tempsPourOuvrirOuFermerLesPortes;
+	boolean descend = (cabine.intention() == 'v');
+
+	if(étage.aDesPassagers()){
+		notYetImplemented();
+	}else if ((!descend && cabine.passagersVeulentDescendre()) || (descend && cabine.passagersVeulentDescendre())){
+		EvenementOuverturePorteCabine eopc = new EvenementOuverturePorteCabine(dateouvrirporte);
+		echeancier.ajouter(eopc);
+	}
 
     }
 }

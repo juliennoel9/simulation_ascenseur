@@ -29,7 +29,7 @@ public class Main extends Global {
     private static boolean assertFlag = false;
 
     public static void main(String args[]) {
-	assert (assertFlag = true);
+	    assert (assertFlag = true);
         System.out.println("Mode de simulation ? (p) parfait ? (i) infernal ? parfait par défaut ?");
         boolean mode = true;
         modeParfait = !readLine().equals("i");

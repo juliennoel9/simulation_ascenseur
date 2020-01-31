@@ -17,22 +17,22 @@ public class Echeancier extends Global {
     }
 
     public void ajouter(Evenement e) {
-	int pos = 0;
-	while (pos < listeEvenements.size()) {
-	    if (listeEvenements.get(pos).date >= e.date) {
+		int pos = 0;
+		while (pos < listeEvenements.size()) {
+			if (listeEvenements.get(pos).date >= e.date) {
+			listeEvenements.add(pos, e);
+			return;
+			} else {
+			pos++;
+			}
+		}
 		listeEvenements.add(pos, e);
-		return;
-	    } else {
-		pos++;
-	    }
-	}
-	listeEvenements.add(pos, e);
     }
 
     public Evenement retourneEtEnlevePremier() {
-	Evenement e = listeEvenements.getFirst();
-	listeEvenements.removeFirst();
-	return e;
+		Evenement e = listeEvenements.getFirst();
+		listeEvenements.removeFirst();
+		return e;
     }
 
     public void affiche(StringBuilder buffer, Immeuble ascenseur) {
