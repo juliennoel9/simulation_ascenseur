@@ -25,14 +25,20 @@ public class EvenementPassageCabinePalier extends Evenement {
 		cabine.étage = étage;
 		long dateouvrirporte =this.date + this.tempsPourOuvrirOuFermerLesPortes;
 		boolean descend = (cabine.intention() == 'v');
-		if (immeuble.cabine.intention() == '^'){
-			e = immeuble.étage(étage.numéro() + 1);
-		}else if (immeuble.cabine.intention() == 'v'){
-			e = immeuble.étage(étage.numéro() - 1);
-		}else{
-			e = immeuble.étage(étage.numéro());
+
+		if (cabine.passagersVeulentDescendre()){
+			EvenementOuverturePorteCabine evenementOuverturePorteCabine = new EvenementOuverturePorteCabine(dateouvrirporte);
+			echeancier.ajouter(evenementOuverturePorteCabine);
+		}else {
+			if (!descend){
+				e = immeuble.étage(étage.numéro() + 1);
+			}else if (descend){
+				e = immeuble.étage(étage.numéro() - 1);
+			}else{
+				e = immeuble.étage(étage.numéro());
+			}
+			EvenementPassageCabinePalier evenementPassageCabinePalier = new EvenementPassageCabinePalier((this.date + this.tempsPourBougerLaCabineDUnEtage),e);
+			echeancier.ajouter(evenementPassageCabinePalier);
 		}
-		EvenementPassageCabinePalier evenementPassageCabinePalier = new EvenementPassageCabinePalier((this.date + this.tempsPourBougerLaCabineDUnEtage),e);
-		echeancier.ajouter(evenementPassageCabinePalier);
     }
 }
