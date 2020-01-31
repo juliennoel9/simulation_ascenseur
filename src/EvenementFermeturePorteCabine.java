@@ -15,13 +15,23 @@ public class EvenementFermeturePorteCabine extends Evenement {
     }
 
     public void traiter(Immeuble immeuble, Echeancier echeancier) {
-	Cabine cabine = immeuble.cabine;
-	assert cabine.porteOuverte;
-	cabine.porteOuverte = false;
+        Cabine cabine = immeuble.cabine;
+        assert cabine.porteOuverte;
+        cabine.porteOuverte = false;
 
-	notYetImplemented();
+        Etage etage = cabine.étage;
+        Etage e;
+        if (immeuble.cabine.intention() == '^'){
+            e = immeuble.étage(etage.numéro() - 1);
+        }else if (immeuble.cabine.intention() == 'v'){
+            e = immeuble.étage(etage.numéro() - 1);
+        }else{
+            e = immeuble.étage(etage.numéro());
+        }
+        EvenementPassageCabinePalier evenementPassageCabinePalier = new EvenementPassageCabinePalier((this.date + this.tempsPourBougerLaCabineDUnEtage),e);
+        echeancier.ajouter(evenementPassageCabinePalier);
 
-	assert ! cabine.porteOuverte;
+        assert ! cabine.porteOuverte;
     }
 
 
