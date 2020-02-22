@@ -109,5 +109,8 @@ public class Cabine extends Global {
 	}
 	return false;
     }
-	
+
+	public Passager[] getTableauPassager() {
+		return tableauPassager;
+	}
 }

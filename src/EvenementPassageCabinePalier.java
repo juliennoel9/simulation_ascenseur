@@ -26,7 +26,7 @@ public class EvenementPassageCabinePalier extends Evenement {
 		long dateouvrirporte =this.date + this.tempsPourOuvrirOuFermerLesPortes;
 		boolean descend = (cabine.intention() == 'v');
 
-		if (cabine.passagersVeulentDescendre()){
+		if (cabine.passagersVeulentDescendre() || étage.aDesPassagers() ){
 			EvenementOuverturePorteCabine evenementOuverturePorteCabine = new EvenementOuverturePorteCabine(dateouvrirporte);
 			echeancier.ajouter(evenementOuverturePorteCabine);
 		}else {
@@ -40,5 +40,5 @@ public class EvenementPassageCabinePalier extends Evenement {
 			EvenementPassageCabinePalier evenementPassageCabinePalier = new EvenementPassageCabinePalier((this.date + this.tempsPourBougerLaCabineDUnEtage),e);
 			echeancier.ajouter(evenementPassageCabinePalier);
 		}
-    }
+	}
 }

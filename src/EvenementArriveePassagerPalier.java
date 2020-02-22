@@ -45,7 +45,12 @@ public class EvenementArriveePassagerPalier extends Evenement {
             this.date = this.date +étage.arrivéeSuivante();
             echeancier.ajouter(this);
         }else {
-            notYetImplemented();
+            étage.ajouter(p);
+            EvenementPietonArrivePalier epap = new EvenementPietonArrivePalier(this.date+Global.délaiDePatienceAvantSportif, étage, p);
+            p.setEvenementPietonArrivePalier(epap);
+            echeancier.ajouter(epap);
+            this.date = this.date +étage.arrivéeSuivante();
+            echeancier.ajouter(this);
         }
     }
 
