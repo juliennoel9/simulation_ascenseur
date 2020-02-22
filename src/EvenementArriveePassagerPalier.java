@@ -20,18 +20,30 @@ public class EvenementArriveePassagerPalier extends Evenement {
 		assert immeuble.étage(étage.numéro()) == étage;
 		Passager p = new Passager(date, étage, immeuble);
 
-
 		Cabine c = immeuble.cabine;
 
 		if(c.intention()=='-'){
-            c.changerIntention(p.sens());
-            if (c.faireMonterPassager(p)) {
-                long ancienneDate = this.date;
-                this.date = this.date +étage.arrivéeSuivante();
-                echeancier.ajouter(this);
+		    if (c.étage.numéro() > étage.numéro()) {
+                c.changerIntention('v');
+            }else {
+                c.changerIntention('^');
+            }
+            long ancienneDate = this.date;
+		    EvenementPietonArrivePalier epap = new EvenementPietonArrivePalier(ancienneDate+Global.délaiDePatienceAvantSportif, étage, p);
+		    p.setEvenementPietonArrivePalier(epap);
+		    echeancier.ajouter(epap);
+            if (c.étage == étage && c.porteOuverte) {
+                c.faireMonterPassager(p);
+                echeancier.supprimePAP(p.getEvenementPietonArrivePalier());
                 EvenementFermeturePorteCabine fpc = new EvenementFermeturePorteCabine(ancienneDate+Global.tempsPourEntrerOuSortirDeLaCabine+Global.tempsPourOuvrirOuFermerLesPortes);
                 echeancier.ajouter(fpc);
+            }else {
+                étage.ajouter(p);
+                EvenementFermeturePorteCabine fpc = new EvenementFermeturePorteCabine(ancienneDate+Global.tempsPourOuvrirOuFermerLesPortes);
+                echeancier.ajouter(fpc);
             }
+            this.date = this.date +étage.arrivéeSuivante();
+            echeancier.ajouter(this);
         }else {
             notYetImplemented();
         }

@@ -81,4 +81,7 @@ public class Echeancier extends Global {
 	}	
     }
 
+    public void supprimePAP(EvenementPietonArrivePalier evenementPietonArrivePalier) {
+    	this.listeEvenements.remove(evenementPietonArrivePalier);
+	}
 }

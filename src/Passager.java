@@ -12,6 +12,8 @@ public class Passager {
 
     private Etage étageDestination;
 
+    private EvenementPietonArrivePalier evenementPietonArrivePalier;
+
     public long dateDépart() {
 	return this.dateDépart;
     }
@@ -70,5 +72,18 @@ public class Passager {
 	buffer.append(':');
 	buffer.append(dateDépart);
     }
-    
+
+    public EvenementPietonArrivePalier getEvenementPietonArrivePalier () {
+    	EvenementPietonArrivePalier temp = this.evenementPietonArrivePalier;
+    	this.evenementPietonArrivePalier = null;
+    	return temp;
+	}
+
+	public void setEvenementPietonArrivePalier(EvenementPietonArrivePalier evenementPietonArrivePalier) {
+		this.evenementPietonArrivePalier = evenementPietonArrivePalier;
+	}
+
+	public long numéroDeCréation() {
+		return numéroDeCréation;
+	}
 }
