@@ -20,8 +20,13 @@ public class EvenementOuverturePorteCabine extends Evenement {
 
         assert cabine.porteOuverte;
 
-        cabine.changerIntention('-');
-
+        if (immeuble.passagerAuDessus(étage)){
+            cabine.changerIntention('^');
+        }else if (immeuble.passagerEnDessous(étage)){
+            cabine.changerIntention('v');
+        }else {
+            cabine.changerIntention('-');
+        }
 
         long nbDescendent= cabine.faireDescendrePassagers(immeuble,this.date);
 
