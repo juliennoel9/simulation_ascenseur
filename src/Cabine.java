@@ -113,4 +113,32 @@ public class Cabine extends Global {
 	public Passager[] getTableauPassager() {
 		return tableauPassager;
 	}
+
+	public boolean aDesPassagers() {
+		for (int i=0; i<this.tableauPassager.length; i++) {
+			if (this.tableauPassager[i] != null){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public char recalculerIntentionInfernale(){
+    	char sens = '-';
+		if (this.aDesPassagers()){
+			int diffEtage = 10;
+			Passager passagerPlusProche=this.getTableauPassager()[0];
+			for (int i1 = 0; i1 < this.getTableauPassager().length; i1++) {
+				if (this.getTableauPassager()[i1] != null ) {
+					if (Math.abs(étage.numéro() - this.getTableauPassager()[i1].numéroDestination()) < diffEtage) {
+						diffEtage = Math.abs(étage.numéro() - this.getTableauPassager()[i1].numéroDestination());
+						passagerPlusProche = this.getTableauPassager()[i1];
+					}
+				}
+			}
+			this.changerIntention(passagerPlusProche.sens());
+			sens = passagerPlusProche.sens();
+		}
+		return sens;
+	}
 }

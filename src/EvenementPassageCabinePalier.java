@@ -47,5 +47,8 @@ public class EvenementPassageCabinePalier extends Evenement {
 			EvenementPassageCabinePalier evenementPassageCabinePalier = new EvenementPassageCabinePalier((this.date + this.tempsPourBougerLaCabineDUnEtage),e);
 			echeancier.ajouter(evenementPassageCabinePalier);
 		}
+		if (!modeParfait){
+			cabine.recalculerIntentionInfernale();
+		}
 	}
 }

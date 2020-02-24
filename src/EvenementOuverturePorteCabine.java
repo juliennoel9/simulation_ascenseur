@@ -41,28 +41,29 @@ public class EvenementOuverturePorteCabine extends Evenement {
             étage.getPassagers().remove(newPass);
             if(!modeParfait){
                 int i = 0;
-                while(étage.getPassagers().size()!=0){
+                while(étage.getPassagers().size()!=0 && i < étage.getPassagers().size()){
                     cabine.faireMonterPassager(étage.getPassagers().get(i));
                     nbMontent ++;
                     echeancier.supprimePAP(étage.getPassagers().get(i).getEvenementPietonArrivePalier());
                     étage.getPassagers().remove(i);
                     i++;
                 }
+                cabine.recalculerIntentionInfernale();
             }else {
-                for (Passager p : étage.getPassagers()) {
-                    if (p.sens() == cabine.intention()) {
-                        if (cabine.faireMonterPassager(p)) {
+                int j = 0;
+                while(j<étage.getPassagers().size()){
+                    if (étage.getPassagers().get(j).sens() == cabine.intention()) {
+                        if (cabine.faireMonterPassager(étage.getPassagers().get(j))) {
                             nbMontent++;
-                            étage.getPassagers().remove(p);
-                            echeancier.supprimePAP(p.getEvenementPietonArrivePalier());
+                            étage.getPassagers().remove(étage.getPassagers().get(j));
+                            echeancier.supprimePAP(étage.getPassagers().get(j).getEvenementPietonArrivePalier());
                         }
                     }
+                    j++;
                 }
             }
         }
         if (cabine.intention()!='-'){
-            //System.err.println("montent " +nbMontent);
-            //System.err.println("descendent " +nbDescendent);
             EvenementFermeturePorteCabine evenementFermeturePorteCabine = new EvenementFermeturePorteCabine(this.date+nbDescendent*tempsPourEntrerOuSortirDeLaCabine+nbMontent*tempsPourEntrerOuSortirDeLaCabine+this.tempsPourOuvrirOuFermerLesPortes);
             echeancier.ajouter(evenementFermeturePorteCabine);
         }
