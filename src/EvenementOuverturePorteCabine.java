@@ -39,17 +39,30 @@ public class EvenementOuverturePorteCabine extends Evenement {
             echeancier.supprimePAP(newPass.getEvenementPietonArrivePalier());
             nbMontent ++;
             étage.getPassagers().remove(newPass);
-            for (Passager p : étage.getPassagers()) {
-                if (p.sens()==cabine.intention()){
-                    if (cabine.faireMonterPassager(p)){
-                        nbMontent ++;
-                        étage.getPassagers().remove(p);
-                        echeancier.supprimePAP(p.getEvenementPietonArrivePalier());
+            if(!modeParfait){
+                int i = 0;
+                while(étage.getPassagers().size()!=0){
+                    cabine.faireMonterPassager(étage.getPassagers().get(i));
+                    nbMontent ++;
+                    echeancier.supprimePAP(étage.getPassagers().get(i).getEvenementPietonArrivePalier());
+                    étage.getPassagers().remove(i);
+                    i++;
+                }
+            }else {
+                for (Passager p : étage.getPassagers()) {
+                    if (p.sens() == cabine.intention()) {
+                        if (cabine.faireMonterPassager(p)) {
+                            nbMontent++;
+                            étage.getPassagers().remove(p);
+                            echeancier.supprimePAP(p.getEvenementPietonArrivePalier());
+                        }
                     }
                 }
             }
         }
         if (cabine.intention()!='-'){
+            //System.err.println("montent " +nbMontent);
+            //System.err.println("descendent " +nbDescendent);
             EvenementFermeturePorteCabine evenementFermeturePorteCabine = new EvenementFermeturePorteCabine(this.date+nbDescendent*tempsPourEntrerOuSortirDeLaCabine+nbMontent*tempsPourEntrerOuSortirDeLaCabine+this.tempsPourOuvrirOuFermerLesPortes);
             echeancier.ajouter(evenementFermeturePorteCabine);
         }
