@@ -141,4 +141,22 @@ public class Cabine extends Global {
 		}
 		return sens;
 	}
+
+	public Passager choisirQuiMonte(){
+    	Passager passagerMontant = null;
+    	if (étage.aDesPassagers()){
+			int diffEtage = 10;
+			passagerMontant=étage.getPassagers().get(0);
+			for (int i1 = 0; i1 < étage.getPassagers().size(); i1++) {
+				if (étage.getPassagers().get(i1) != null ) {
+					if (Math.abs(étage.numéro() - étage.getPassagers().get(i1).numéroDestination()) < diffEtage) {
+						diffEtage = Math.abs(étage.numéro() - étage.getPassagers().get(i1).numéroDestination());
+						passagerMontant = étage.getPassagers().get(i1);
+					}
+				}
+			}
+			this.changerIntention(passagerMontant.sens());
+		}
+    	return passagerMontant;
+	}
 }

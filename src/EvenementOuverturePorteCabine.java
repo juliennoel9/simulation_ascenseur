@@ -34,11 +34,16 @@ public class EvenementOuverturePorteCabine extends Evenement {
 
         if (étage.aDesPassagers()){
             Passager newPass = étage.getPassagers().get(0);
-            cabine.changerIntention(newPass.sens());
-            cabine.faireMonterPassager(newPass);
-            echeancier.supprimePAP(newPass.getEvenementPietonArrivePalier());
-            nbMontent ++;
-            étage.getPassagers().remove(newPass);
+            if (modeParfait){
+                newPass = cabine.choisirQuiMonte();
+            }
+            if (newPass != null){
+                cabine.changerIntention(newPass.sens());
+                cabine.faireMonterPassager(newPass);
+                echeancier.supprimePAP(newPass.getEvenementPietonArrivePalier());
+                nbMontent ++;
+                étage.getPassagers().remove(newPass);
+            }
             if(!modeParfait){
                 int i = 0;
                 while(étage.getPassagers().size()!=0 && i < étage.getPassagers().size()){
@@ -55,8 +60,8 @@ public class EvenementOuverturePorteCabine extends Evenement {
                     if (étage.getPassagers().get(j).sens() == cabine.intention()) {
                         if (cabine.faireMonterPassager(étage.getPassagers().get(j))) {
                             nbMontent++;
-                            étage.getPassagers().remove(étage.getPassagers().get(j));
                             echeancier.supprimePAP(étage.getPassagers().get(j).getEvenementPietonArrivePalier());
+                            étage.getPassagers().remove(étage.getPassagers().get(j));
                         }
                     }
                     j++;
