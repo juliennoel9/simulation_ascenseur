@@ -28,6 +28,9 @@ public class EvenementPassageCabinePalier extends Evenement {
 		if(étage==immeuble.étageLePlusHaut()){
 			cabine.changerIntention('v');
 		}
+		//else if (étage==immeuble.étageLePlusBas()){
+		//	cabine.changerIntention('^');
+		//}
 
 		boolean descend = (cabine.intention() == 'v');
 
