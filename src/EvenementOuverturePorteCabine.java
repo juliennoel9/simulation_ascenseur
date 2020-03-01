@@ -72,6 +72,9 @@ public class EvenementOuverturePorteCabine extends Evenement {
             EvenementFermeturePorteCabine evenementFermeturePorteCabine = new EvenementFermeturePorteCabine(this.date+nbDescendent*tempsPourEntrerOuSortirDeLaCabine+nbMontent*tempsPourEntrerOuSortirDeLaCabine+this.tempsPourOuvrirOuFermerLesPortes);
             echeancier.ajouter(evenementFermeturePorteCabine);
         }
+        if(étage==immeuble.étageLePlusHaut()){
+            cabine.changerIntention('v');
+        }
     }
 
 }

@@ -25,9 +25,9 @@ public class EvenementPassageCabinePalier extends Evenement {
 		cabine.étage = étage;
 		long dateouvrirporte =this.date + this.tempsPourOuvrirOuFermerLesPortes;
 
-		if(étage==immeuble.étageLePlusHaut()){
+		/*if(étage==immeuble.étageLePlusHaut()){
 			cabine.changerIntention('v');
-		}
+		}*/
 		//else if (étage==immeuble.étageLePlusBas()){
 		//	cabine.changerIntention('^');
 		//}

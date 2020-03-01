@@ -121,4 +121,32 @@ public class Etage extends Global {
 	public ArrayList<Passager> getPassagers() {
 		return passagers;
 	}
+
+	public Etage pietonMonteEtage(Passager passager, long d, Echeancier e, Immeuble immeuble){
+		Etage res = null;
+		if (passager.numéroDestination() > this.numéro) {
+			res = immeuble.étage(this.numéro+1);
+		}else{
+			res = immeuble.étage(this.numéro-1);
+		}
+		if(this.passagers.contains(passager)){
+			this.pietons.add(passager);
+			res = immeuble.étage(this.numéro);
+			e.supprimePAP(passager.getEvenementPietonArrivePalier());
+			this.passagers.remove(passager);
+			return res;
+		}
+		if(passager.numéroDestination() == res.numéro){
+			this.pietons.remove(passager);
+			immeuble.ajouterPassagerSorti();
+			immeuble.ajouterCumul(d-passager.dateDépart());
+			return null;
+		}else{
+			if(this.pietons.contains(passager)){
+				res.pietons.add(passager);
+				this.pietons.remove(passager);
+			}
+		}
+		return res;
+	}
 }
