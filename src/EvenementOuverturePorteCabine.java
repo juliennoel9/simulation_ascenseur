@@ -44,42 +44,46 @@ public class EvenementOuverturePorteCabine extends Evenement {
             if (modeParfait && newPass != null){
                 if ((oldIntention == '^' && !immeuble.passagerAuDessus(cabine.étage)) ||
                         (oldIntention == 'v' && !immeuble.passagerEnDessous(cabine.étage))){
-                    cabine.changerIntention(newPass.sens());
-                    cabine.faireMonterPassager(newPass);
-                    cabine.changerIntention(newPass.sens());
-                    echeancier.supprimePAP(newPass.getEvenementPietonArrivePalier());
-                    nbMontent ++;
-                    étage.getPassagers().remove(newPass);
+                    if (cabine.faireMonterPassager(newPass)){
+                        cabine.changerIntention(newPass.sens());
+                        echeancier.supprimePAP(newPass.getEvenementPietonArrivePalier());
+                        nbMontent ++;
+                        étage.getPassagers().remove(newPass);
+                    }
                 }else if (newPass.sens() == oldIntention) {
-                    cabine.faireMonterPassager(newPass);
-                    cabine.changerIntention(newPass.sens());
-                    echeancier.supprimePAP(newPass.getEvenementPietonArrivePalier());
-                    nbMontent ++;
-                    étage.getPassagers().remove(newPass);
+                    if (cabine.faireMonterPassager(newPass)){
+                        cabine.changerIntention(newPass.sens());
+                        echeancier.supprimePAP(newPass.getEvenementPietonArrivePalier());
+                        nbMontent ++;
+                        étage.getPassagers().remove(newPass);
+                    }
                 }else if(newPass.sens() != oldIntention && !cabine.aDesPassagers() && !immeuble.passagerAuDessus(cabine.étage) && !immeuble.passagerEnDessous(cabine.étage)){
-                    cabine.faireMonterPassager(newPass);
-                    cabine.changerIntention(newPass.sens());
-                    echeancier.supprimePAP(newPass.getEvenementPietonArrivePalier());
-                    nbMontent ++;
-                    étage.getPassagers().remove(newPass);
+                    if(cabine.faireMonterPassager(newPass)){
+                        cabine.changerIntention(newPass.sens());
+                        echeancier.supprimePAP(newPass.getEvenementPietonArrivePalier());
+                        nbMontent ++;
+                        étage.getPassagers().remove(newPass);
+                    }
                 }else{
                     cabine.changerIntention(oldIntention);
                 }
             }
             if (!modeParfait){
-                cabine.changerIntention(newPass.sens());
-                cabine.faireMonterPassager(newPass);
-                echeancier.supprimePAP(newPass.getEvenementPietonArrivePalier());
-                nbMontent ++;
-                étage.getPassagers().remove(newPass);
+                if (cabine.faireMonterPassager(newPass)){
+                    cabine.changerIntention(newPass.sens());
+                    echeancier.supprimePAP(newPass.getEvenementPietonArrivePalier());
+                    nbMontent ++;
+                    étage.getPassagers().remove(newPass);
+                }
             }
             if(!modeParfait){
                 int i = 0;
                 while(étage.getPassagers().size()!=0 && i < étage.getPassagers().size()){
-                    cabine.faireMonterPassager(étage.getPassagers().get(i));
-                    nbMontent ++;
-                    echeancier.supprimePAP(étage.getPassagers().get(i).getEvenementPietonArrivePalier());
-                    étage.getPassagers().remove(i);
+                    if (cabine.faireMonterPassager(étage.getPassagers().get(i))){
+                        nbMontent ++;
+                        echeancier.supprimePAP(étage.getPassagers().get(i).getEvenementPietonArrivePalier());
+                        étage.getPassagers().remove(i);
+                    }
                     i++;
                 }
                 cabine.recalculerIntentionInfernale();
