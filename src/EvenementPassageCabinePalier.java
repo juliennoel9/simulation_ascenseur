@@ -19,9 +19,10 @@ public class EvenementPassageCabinePalier extends Evenement {
     public void traiter(Immeuble immeuble, Echeancier echeancier) {
 		Cabine cabine = immeuble.cabine;
 		assert ! cabine.porteOuverte;
-		assert étage.numéro() != cabine.étage.numéro();
+		//assert étage.numéro() != cabine.étage.numéro();
 
 		Etage e;
+		Cabine oldCabine = immeuble.cabine;
 		cabine.étage = étage;
 		long dateouvrirporte =this.date + this.tempsPourOuvrirOuFermerLesPortes;
 
@@ -34,14 +35,28 @@ public class EvenementPassageCabinePalier extends Evenement {
 
 		boolean descend = (cabine.intention() == 'v');
 
-		if (cabine.passagersVeulentDescendre() || étage.aDesPassagers() ){
-			EvenementOuverturePorteCabine evenementOuverturePorteCabine = new EvenementOuverturePorteCabine(dateouvrirporte);
-			echeancier.ajouter(evenementOuverturePorteCabine);
-		}else {
+		//if (cabine.passagersVeulentDescendre() || étage.aDesPassagers() ){
+			if (modeParfait && (cabine.passagersVeulentDescendre() ||
+					(!cabine.aDesPassagers() && étage.aDesPassagers() &&  (   (cabine.intention() == '^' && !immeuble.passagerAuDessus(cabine.étage)) ||     (cabine.intention() == 'v' && !immeuble.passagerEnDessous(cabine.étage))   )   ) ||
+					étage.aPassagersMemeSansCabine(cabine.intention()) ||
+					((cabine.intention() == '^' && !immeuble.passagerAuDessus(cabine.étage) && étage.aPassagersMemeSansCabine(cabine.intention())) || (cabine.intention() == 'v' && !immeuble.passagerEnDessous(cabine.étage) && étage.aPassagersMemeSansCabine(cabine.intention()))))
+			){
+				EvenementOuverturePorteCabine evenementOuverturePorteCabine = new EvenementOuverturePorteCabine(dateouvrirporte);
+				echeancier.ajouter(evenementOuverturePorteCabine);
+			}else if (!modeParfait && (cabine.passagersVeulentDescendre() || étage.aDesPassagers())) {
+				EvenementOuverturePorteCabine evenementOuverturePorteCabine = new EvenementOuverturePorteCabine(dateouvrirporte);
+				echeancier.ajouter(evenementOuverturePorteCabine);
+			}
+		//}
+		else {
 			if (!descend){
 				e = immeuble.étage(étage.numéro() + 1);
 			}else if (descend){
-				e = immeuble.étage(étage.numéro() - 1);
+				if (oldCabine.étage == immeuble.étageLePlusBas()){
+					e = oldCabine.étage;
+				}else {
+					e = immeuble.étage(étage.numéro() - 1);
+				}
 			}else{
 				e = immeuble.étage(étage.numéro());
 			}

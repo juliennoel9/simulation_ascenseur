@@ -144,6 +144,7 @@ public class Cabine extends Global {
 
 	public Passager choisirQuiMonte(){
     	Passager passagerMontant = null;
+    	Passager first = étage.getPassagers().get(0);
     	if (étage.aDesPassagers()){
 			int diffEtage = 10;
 			passagerMontant=étage.getPassagers().get(0);
@@ -151,7 +152,9 @@ public class Cabine extends Global {
 				if (étage.getPassagers().get(i1) != null ) {
 					if (Math.abs(étage.numéro() - étage.getPassagers().get(i1).numéroDestination()) < diffEtage) {
 						diffEtage = Math.abs(étage.numéro() - étage.getPassagers().get(i1).numéroDestination());
-						passagerMontant = étage.getPassagers().get(i1);
+						if (étage.getPassagers().get(i1).sens() != first.sens()){
+							passagerMontant = étage.getPassagers().get(i1);
+						}
 					}
 				}
 			}

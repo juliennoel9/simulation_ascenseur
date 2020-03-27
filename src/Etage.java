@@ -118,6 +118,15 @@ public class Etage extends Global {
 	return (!passagers.isEmpty());
     }
 
+    public boolean aPassagersMemeSansCabine(char sensCabine) {
+		for (Passager p : this.getPassagers()) {
+			if (p.sens()==sensCabine){
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public ArrayList<Passager> getPassagers() {
 		return passagers;
 	}
@@ -148,5 +157,9 @@ public class Etage extends Global {
 			}
 		}
 		return res;
+	}
+
+	public void setPassagers(ArrayList<Passager> passagers) {
+		this.passagers = passagers;
 	}
 }
