@@ -49,8 +49,7 @@ public class EvenementArriveePassagerPalier extends Evenement {
             EvenementPietonArrivePalier epap = new EvenementPietonArrivePalier(this.date+Global.délaiDePatienceAvantSportif, étage, p);
             p.setEvenementPietonArrivePalier(epap);
             echeancier.ajouter(epap);
-            this.date = this.date +étage.arrivéeSuivante();
-            echeancier.ajouter(this);
+
             if (modeParfait && c.porteOuverte && c.intention()==p.sens() && c.étage == p.étageDépart()){
                 if (c.faireMonterPassager(p)){
                     echeancier.supprimePAP(p.getEvenementPietonArrivePalier());
@@ -64,6 +63,9 @@ public class EvenementArriveePassagerPalier extends Evenement {
                     echeancier.decalerFPC();
                 }
             }
+
+            this.date = this.date +étage.arrivéeSuivante();
+            echeancier.ajouter(this);
         }
     }
 

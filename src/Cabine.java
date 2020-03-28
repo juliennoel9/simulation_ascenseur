@@ -230,4 +230,28 @@ public class Cabine extends Global {
 		}
 		return true;
 	}
+
+	public boolean aPassagersMontantEtDescendant () {
+    	boolean monte = false;
+    	boolean descend = false;
+		for (Passager p : this.getTableauPassager()) {
+			if (p != null) {
+				if (p.sens() == 'v'){
+					descend = true;
+				} else if (p.sens() == '^') {
+					monte = true;
+				}
+			}
+		}
+		return (monte && descend);
+	}
+
+	public char getSensPremierPassager() {
+		for (Passager p : this.getTableauPassager()) {
+			if (p != null) {
+				return p.sens();
+			}
+		}
+		return '-';
+	}
 }

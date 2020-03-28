@@ -155,6 +155,10 @@ public class EvenementOuverturePorteCabine extends Evenement {
             cabine.changerIntention(oldIntention);
         }
 
+        if (!modeParfait && cabine.aPassagersMontantEtDescendant()){
+            cabine.changerIntention(oldIntention);
+        }
+
         if(étage==immeuble.étageLePlusHaut()){
             cabine.changerIntention('v');
         }

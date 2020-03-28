@@ -53,11 +53,18 @@ public class EvenementPassageCabinePalier extends Evenement {
 			} else if (cabine.intention()=='^' && !immeuble.passagerAuDessus(étage) && !cabine.aDesPassagers() && immeuble.passagerEnDessous(étage)){
 				cabine.changerIntention('v');
 				e = immeuble.étage(étage.numéro() - 1);
-			} else {
+			} else if (!modeParfait && cabine.intention()=='v' && !immeuble.passagerEnDessous(étage) && cabine.nbPassagers()==1 && cabine.aDesPassagers() && cabine.intention() != cabine.getSensPremierPassager()) {
+				cabine.changerIntention(cabine.getSensPremierPassager());
+				e = immeuble.étage(étage.numéro() + 1);
+			} else if (!modeParfait && cabine.intention()=='^' && !immeuble.passagerAuDessus(étage) && cabine.nbPassagers()==1 && cabine.aDesPassagers() && cabine.intention() != cabine.getSensPremierPassager()) {
+				cabine.changerIntention(cabine.getSensPremierPassager());
+				e = immeuble.étage(étage.numéro() - 1);
+			} else{
 				if (!descend){
 					if (oldCabine.étage == immeuble.étageLePlusHaut()){
 						//e = oldCabine.étage;
 						e = immeuble.étage(oldCabine.étage.numéro()-1);
+						cabine.changerIntention('v');
 					}else {
 						e = immeuble.étage(étage.numéro() + 1);
 					}
@@ -65,6 +72,7 @@ public class EvenementPassageCabinePalier extends Evenement {
 					if (oldCabine.étage == immeuble.étageLePlusBas()){
 						//e = oldCabine.étage;
 						e = immeuble.étage(oldCabine.étage.numéro()+1);
+						cabine.changerIntention('^');
 					}else {
 						e = immeuble.étage(étage.numéro() - 1);
 					}
