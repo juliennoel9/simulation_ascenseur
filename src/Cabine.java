@@ -173,6 +173,55 @@ public class Cabine extends Global {
     	return passagerMontant;
 	}
 
+	public Passager getFirstWithSameIntention(char intention) {
+		for (Passager p : this.étage.getPassagers()) {
+			if (p.sens() == intention) {
+				return p;
+			}
+		}
+		return null;
+	}
+
+	public Passager choisirQuiMonte2() {
+    	Passager montant = null;
+    	Passager first = étage.getPassagers().get(0);
+    	if (étage.aDesPassagers()){
+    		int diffEtage = 10;
+			for (int i = 0; i < étage.getPassagers().size(); i++) {
+				Passager temp = étage.getPassagers().get(i);
+				if (temp != null) {
+
+				}
+			}
+		}
+    	return montant;
+	}
+
+	public Passager choisirQuiMonte3() {
+		Passager passagerMontant = null;
+		Passager first = étage.getPassagers().get(0);
+		if (étage.aDesPassagers()){
+			int diffEtage = 10;
+			passagerMontant=étage.getPassagers().get(0);
+			for (int i1 = 0; i1 < étage.getPassagers().size(); i1++) {
+				if (étage.getPassagers().get(i1) != null ) {
+					if (Math.abs(étage.numéro() - étage.getPassagers().get(i1).numéroDestination()) < diffEtage) {
+						diffEtage = Math.abs(étage.numéro() - étage.getPassagers().get(i1).numéroDestination());
+						if (this.aDesPassagers()){
+							if (étage.getPassagers().get(i1).sens()==this.intention){
+								passagerMontant = étage.getPassagers().get(i1);
+							}
+						}else if (étage.getPassagers().get(i1).sens() != first.sens()){
+							passagerMontant = étage.getPassagers().get(i1);
+						}
+					}
+				}
+			}
+			this.changerIntention(passagerMontant.sens());
+		}
+		return passagerMontant;
+	}
+
 	public boolean aucunPassagerMemeSens() {
 		for (Passager p : this.getTableauPassager()) {
 			if (p != null) {

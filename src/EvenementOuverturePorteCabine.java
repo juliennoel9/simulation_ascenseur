@@ -48,13 +48,17 @@ public class EvenementOuverturePorteCabine extends Evenement {
             if (modeParfait && newPass != null){
                 if ((oldIntention == '^' && !immeuble.passagerAuDessus(cabine.étage)) ||
                         (oldIntention == 'v' && !immeuble.passagerEnDessous(cabine.étage))){
-                    if (cabine.faireMonterPassager(newPass)){
-                        cabine.changerIntention(newPass.sens());
-                        echeancier.supprimePAP(newPass.getEvenementPietonArrivePalier());
-                        nbMontent ++;
-                        étage.getPassagers().remove(newPass);
+                    //System.err.println("1");
+                    if (newPass.sens() == oldIntention || !cabine.aDesPassagers()){
+                        if (cabine.faireMonterPassager(newPass)){
+                            cabine.changerIntention(newPass.sens());
+                            echeancier.supprimePAP(newPass.getEvenementPietonArrivePalier());
+                            nbMontent ++;
+                            étage.getPassagers().remove(newPass);
+                        }
                     }
                 }else if (newPass.sens() == oldIntention) {
+                    //System.err.println("2");
                     if (cabine.faireMonterPassager(newPass)){
                         cabine.changerIntention(newPass.sens());
                         echeancier.supprimePAP(newPass.getEvenementPietonArrivePalier());
@@ -62,13 +66,25 @@ public class EvenementOuverturePorteCabine extends Evenement {
                         étage.getPassagers().remove(newPass);
                     }
                 }else if(newPass.sens() != oldIntention && !cabine.aDesPassagers() && !immeuble.passagerAuDessus(cabine.étage) && !immeuble.passagerEnDessous(cabine.étage)){
+                    //System.err.println("3");
                     if(cabine.faireMonterPassager(newPass)){
                         cabine.changerIntention(newPass.sens());
                         echeancier.supprimePAP(newPass.getEvenementPietonArrivePalier());
                         nbMontent ++;
                         étage.getPassagers().remove(newPass);
                     }
-                }else{
+                } else if (étage.getPassagers().size() > 1 && étage.aPassagersMemeSansCabine(oldIntention)) {
+                    //System.err.println("4");
+                    newPass = cabine.getFirstWithSameIntention(oldIntention);
+                    if (newPass != null){
+                        cabine.changerIntention(newPass.sens());
+                        cabine.faireMonterPassager(newPass);
+                        echeancier.supprimePAP(newPass.getEvenementPietonArrivePalier());
+                        nbMontent ++;
+                        étage.getPassagers().remove(newPass);
+                    }
+                } else{
+                    //System.err.println("5");
                     cabine.changerIntention(oldIntention);
                 }
             }
@@ -102,19 +118,21 @@ public class EvenementOuverturePorteCabine extends Evenement {
                     cabine.recalculerIntentionInfernale();
                 }
             }else {
-                int j = 0;
-                ArrayList<Passager> clone = new ArrayList<>(étage.getPassagers());
-                while(j<étage.getPassagers().size()){
-                    if (étage.getPassagers().get(j).sens() == cabine.intention()) {
-                        if (cabine.faireMonterPassager(étage.getPassagers().get(j))) {
-                            nbMontent++;
-                            echeancier.supprimePAP(étage.getPassagers().get(j).getEvenementPietonArrivePalier());
-                            clone.remove(étage.getPassagers().get(j));
+                if (nbMontent>=1){
+                    int j = 0;
+                    ArrayList<Passager> clone = new ArrayList<>(étage.getPassagers());
+                    while(j<étage.getPassagers().size()){
+                        if (étage.getPassagers().get(j).sens() == cabine.intention()) {
+                            if (cabine.faireMonterPassager(étage.getPassagers().get(j))) {
+                                nbMontent++;
+                                echeancier.supprimePAP(étage.getPassagers().get(j).getEvenementPietonArrivePalier());
+                                clone.remove(étage.getPassagers().get(j));
+                            }
                         }
+                        j++;
                     }
-                    j++;
+                    étage.setPassagers(clone);
                 }
-                étage.setPassagers(clone);
             }
         }
         if (cabine.intention()!='-'){
@@ -129,7 +147,6 @@ public class EvenementOuverturePorteCabine extends Evenement {
             cabine.changerIntention(oldIntention);
         }
 
-
         if (!modeParfait && cabine.aucunPassagerMemeSens()){
             cabine.recalculerIntentionInfernale();
         }
@@ -141,7 +158,7 @@ public class EvenementOuverturePorteCabine extends Evenement {
         if(étage==immeuble.étageLePlusHaut()){
             cabine.changerIntention('v');
         }
-        if(étage==immeuble.étageLePlusBas()){
+        if(étage==immeuble.étageLePlusBas() && (immeuble.passagerEnDessous(étage) || immeuble.passagerAuDessus(étage) || cabine.aDesPassagers())){
             cabine.changerIntention('^');
         }
 
