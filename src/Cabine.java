@@ -123,6 +123,16 @@ public class Cabine extends Global {
 		return false;
 	}
 
+	public int nbPassagers() {
+    	int res = 0;
+		for (Passager p : this.tableauPassager) {
+			if (p != null){
+				res++;
+			}
+		}
+		return res;
+	}
+
 	public char recalculerIntentionInfernale(){
     	char sens = '-';
 		if (this.aDesPassagers()){
@@ -161,5 +171,14 @@ public class Cabine extends Global {
 			this.changerIntention(passagerMontant.sens());
 		}
     	return passagerMontant;
+	}
+
+	public boolean aucunPassagerMemeSens() {
+		for (Passager p : this.getTableauPassager()) {
+			if (p != null) {
+				if (p.sens() == this.intention) return false;
+			}
+		}
+		return true;
 	}
 }

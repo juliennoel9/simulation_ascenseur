@@ -54,6 +54,13 @@ public class Echeancier extends Global {
 	System.out.println(buffer);
     }
 
+    public boolean haveFPC(){
+		for (Evenement e : listeEvenements) {
+			if (e instanceof EvenementFermeturePorteCabine) return true;
+		}
+		return false;
+	}
+
     public void decalerFPC(){
 	int index = 0;
 	while ( true ) {

@@ -51,12 +51,18 @@ public class EvenementArriveePassagerPalier extends Evenement {
             echeancier.ajouter(epap);
             this.date = this.date +étage.arrivéeSuivante();
             echeancier.ajouter(this);
-
-            if (c.porteOuverte && c.intention()==p.sens() && c.étage == p.étageDépart()){
-                c.faireMonterPassager(p);
-                echeancier.supprimePAP(p.getEvenementPietonArrivePalier());
-                étage.getPassagers().remove(p);
-                echeancier.decalerFPC();
+            if (modeParfait && c.porteOuverte && c.intention()==p.sens() && c.étage == p.étageDépart()){
+                if (c.faireMonterPassager(p)){
+                    echeancier.supprimePAP(p.getEvenementPietonArrivePalier());
+                    étage.getPassagers().remove(p);
+                    echeancier.decalerFPC();
+                }
+            }else if (!modeParfait && c.porteOuverte && c.étage == p.étageDépart()) {
+                if (c.faireMonterPassager(p)){
+                    echeancier.supprimePAP(p.getEvenementPietonArrivePalier());
+                    étage.getPassagers().remove(p);
+                    echeancier.decalerFPC();
+                }
             }
         }
     }

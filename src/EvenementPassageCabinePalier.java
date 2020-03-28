@@ -50,7 +50,11 @@ public class EvenementPassageCabinePalier extends Evenement {
 		//}
 		else {
 			if (!descend){
-				e = immeuble.étage(étage.numéro() + 1);
+				if (oldCabine.étage == immeuble.étageLePlusHaut()){
+					e = oldCabine.étage;
+				}else {
+					e = immeuble.étage(étage.numéro() + 1);
+				}
 			}else if (descend){
 				if (oldCabine.étage == immeuble.étageLePlusBas()){
 					e = oldCabine.étage;
@@ -62,9 +66,6 @@ public class EvenementPassageCabinePalier extends Evenement {
 			}
 			EvenementPassageCabinePalier evenementPassageCabinePalier = new EvenementPassageCabinePalier((this.date + this.tempsPourBougerLaCabineDUnEtage),e);
 			echeancier.ajouter(evenementPassageCabinePalier);
-		}
-		if (!modeParfait){
-			cabine.recalculerIntentionInfernale();
 		}
 	}
 }

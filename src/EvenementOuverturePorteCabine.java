@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class EvenementOuverturePorteCabine extends Evenement {
     /* OPC: Ouverture Porte Cabine
@@ -22,7 +23,10 @@ public class EvenementOuverturePorteCabine extends Evenement {
 
         assert cabine.porteOuverte;
 
+        Cabine oldCabine = cabine;
+        int oldNbPassagerCabine = cabine.nbPassagers();
         char oldIntention = cabine.intention();
+        Passager[] oldTabPassagersCabine = cabine.getTableauPassager().clone();
 
         if (immeuble.passagerAuDessus(étage)){
             cabine.changerIntention('^');
@@ -69,8 +73,14 @@ public class EvenementOuverturePorteCabine extends Evenement {
                 }
             }
             if (!modeParfait){
+                boolean tmpPassagers = cabine.aDesPassagers();
                 if (cabine.faireMonterPassager(newPass)){
-                    cabine.changerIntention(newPass.sens());
+                    if (tmpPassagers){
+                        cabine.changerIntention(oldIntention);
+                    }
+                    if (oldNbPassagerCabine==0){
+                        cabine.changerIntention(newPass.sens());
+                    }
                     echeancier.supprimePAP(newPass.getEvenementPietonArrivePalier());
                     nbMontent ++;
                     étage.getPassagers().remove(newPass);
@@ -78,15 +88,19 @@ public class EvenementOuverturePorteCabine extends Evenement {
             }
             if(!modeParfait){
                 int i = 0;
+                ArrayList<Passager> clone = new ArrayList<>(étage.getPassagers());
                 while(étage.getPassagers().size()!=0 && i < étage.getPassagers().size()){
                     if (cabine.faireMonterPassager(étage.getPassagers().get(i))){
                         nbMontent ++;
                         echeancier.supprimePAP(étage.getPassagers().get(i).getEvenementPietonArrivePalier());
-                        étage.getPassagers().remove(i);
+                        clone.remove(étage.getPassagers().get(i));
                     }
                     i++;
                 }
-                cabine.recalculerIntentionInfernale();
+                étage.setPassagers(clone);
+                if(oldNbPassagerCabine==0 || nbDescendent == 4){
+                    cabine.recalculerIntentionInfernale();
+                }
             }else {
                 int j = 0;
                 ArrayList<Passager> clone = new ArrayList<>(étage.getPassagers());
@@ -107,6 +121,23 @@ public class EvenementOuverturePorteCabine extends Evenement {
             EvenementFermeturePorteCabine evenementFermeturePorteCabine = new EvenementFermeturePorteCabine(this.date+nbDescendent*tempsPourEntrerOuSortirDeLaCabine+nbMontent*tempsPourEntrerOuSortirDeLaCabine+this.tempsPourOuvrirOuFermerLesPortes);
             echeancier.ajouter(evenementFermeturePorteCabine);
         }
+
+        if (nbMontent == 0 && cabine.aDesPassagers()){
+            cabine.changerIntention(oldIntention);
+        }
+        if (!modeParfait && Arrays.equals(cabine.getTableauPassager(), oldTabPassagersCabine) && oldCabine.aDesPassagers()){
+            cabine.changerIntention(oldIntention);
+        }
+
+
+        if (!modeParfait && cabine.aucunPassagerMemeSens()){
+            cabine.recalculerIntentionInfernale();
+        }
+
+        if (!modeParfait && ( (oldIntention=='v' && immeuble.passagerEnDessous(étage)) || (oldIntention=='^' && immeuble.passagerAuDessus(étage)) )) {
+            cabine.changerIntention(oldIntention);
+        }
+
         if(étage==immeuble.étageLePlusHaut()){
             cabine.changerIntention('v');
         }
@@ -114,8 +145,10 @@ public class EvenementOuverturePorteCabine extends Evenement {
             cabine.changerIntention('^');
         }
 
-        if (modeParfait && nbMontent == 0 && cabine.aDesPassagers()){
-            cabine.changerIntention(oldIntention);
+
+        if (cabine.intention() != '-' && !echeancier.haveFPC()){
+            EvenementFermeturePorteCabine evenementFermeturePorteCabine = new EvenementFermeturePorteCabine(this.date+nbDescendent*tempsPourEntrerOuSortirDeLaCabine+nbMontent*tempsPourEntrerOuSortirDeLaCabine+this.tempsPourOuvrirOuFermerLesPortes);
+            echeancier.ajouter(evenementFermeturePorteCabine);
         }
     }
 
