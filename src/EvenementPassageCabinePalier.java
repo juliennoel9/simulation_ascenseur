@@ -48,33 +48,25 @@ public class EvenementPassageCabinePalier extends Evenement {
 			echeancier.ajouter(evenementOuverturePorteCabine);
 		} else {
 			if (cabine.intention() == 'v' && !immeuble.passagerEnDessous(étage) && !cabine.aDesPassagers() && immeuble.passagerAuDessus(étage)) {
-				//System.err.println("1");
 				cabine.changerIntention('^');
 				e = immeuble.étage(étage.numéro() + 1);
 			} else if (cabine.intention() == '^' && !immeuble.passagerAuDessus(étage) && !cabine.aDesPassagers() && immeuble.passagerEnDessous(étage)) {
-				//System.err.println("2");
 				cabine.changerIntention('v');
 				e = immeuble.étage(étage.numéro() - 1);
 			} else if (!modeParfait && cabine.intention() == 'v' && !immeuble.passagerEnDessous(étage) && cabine.nbPassagers() == 1 && cabine.aDesPassagers() && cabine.intention() != cabine.getSensPremierPassager()) {
-				//System.err.println("3");
 				cabine.changerIntention(cabine.getSensPremierPassager());
 				e = immeuble.étage(étage.numéro() + 1);
 			} else if (!modeParfait && cabine.intention() == '^' && !immeuble.passagerAuDessus(étage) && cabine.nbPassagers() == 1 && cabine.aDesPassagers() && cabine.intention() != cabine.getSensPremierPassager()) {
-				//System.err.println("4");
 				cabine.changerIntention(cabine.getSensPremierPassager());
 				e = immeuble.étage(étage.numéro() - 1);
 			} else if (!modeParfait && cabine.intention() == '^' && !immeuble.passagerAuDessus(étage) && cabine.aDesPassagers() && cabine.aucunPassagerMemeSens()) {
-				//System.err.println("5");
 				cabine.changerIntention('v');
 				e = immeuble.étage(étage.numéro() - 1);
 			} else if (!modeParfait && cabine.intention() == 'v' && !immeuble.passagerEnDessous(étage) && cabine.aDesPassagers() && cabine.aucunPassagerMemeSens()) {
-				//System.err.println("6");
 				cabine.changerIntention('^');
 				e = immeuble.étage(étage.numéro() + 1);
 			}else{
-				//System.err.println("7");
 				if (!descend){
-					//System.err.println("8");
 					if (oldCabine.étage == immeuble.étageLePlusHaut()){
 						//e = oldCabine.étage;
 						e = immeuble.étage(oldCabine.étage.numéro()-1);
@@ -83,7 +75,6 @@ public class EvenementPassageCabinePalier extends Evenement {
 						e = immeuble.étage(étage.numéro() + 1);
 					}
 				}else if (descend){
-					//System.err.println("9");
 					if (oldCabine.étage == immeuble.étageLePlusBas()){
 						//e = oldCabine.étage;
 						e = immeuble.étage(oldCabine.étage.numéro()+1);
@@ -92,7 +83,6 @@ public class EvenementPassageCabinePalier extends Evenement {
 						e = immeuble.étage(étage.numéro() - 1);
 					}
 				}else{
-					//System.err.println("10");
 					e = immeuble.étage(étage.numéro());
 				}
 			}

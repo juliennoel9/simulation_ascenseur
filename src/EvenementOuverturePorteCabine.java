@@ -48,17 +48,28 @@ public class EvenementOuverturePorteCabine extends Evenement {
             if (modeParfait && newPass != null){
                 if ((oldIntention == '^' && !immeuble.passagerAuDessus(cabine.étage)) ||
                         (oldIntention == 'v' && !immeuble.passagerEnDessous(cabine.étage))){
-                    //System.err.println("1");
                     if (newPass.sens() == oldIntention || !cabine.aDesPassagers()){
-                        if (cabine.faireMonterPassager(newPass)){
-                            cabine.changerIntention(newPass.sens());
-                            echeancier.supprimePAP(newPass.getEvenementPietonArrivePalier());
-                            nbMontent ++;
-                            étage.getPassagers().remove(newPass);
+                        if (!cabine.aDesPassagers()){
+                            if (cabine.getFirstWithSameIntention(oldIntention)!=null){
+                                newPass = cabine.getFirstWithSameIntention(oldIntention);
+                            }
+                            if (newPass != null){
+                                cabine.changerIntention(newPass.sens());
+                                cabine.faireMonterPassager(newPass);
+                                echeancier.supprimePAP(newPass.getEvenementPietonArrivePalier());
+                                nbMontent ++;
+                                étage.getPassagers().remove(newPass);
+                            }
+                        }else {
+                            if (cabine.faireMonterPassager(newPass)){
+                                cabine.changerIntention(newPass.sens());
+                                echeancier.supprimePAP(newPass.getEvenementPietonArrivePalier());
+                                nbMontent ++;
+                                étage.getPassagers().remove(newPass);
+                            }
                         }
                     }
                 }else if (newPass.sens() == oldIntention) {
-                    //System.err.println("2");
                     if (cabine.faireMonterPassager(newPass)){
                         cabine.changerIntention(newPass.sens());
                         echeancier.supprimePAP(newPass.getEvenementPietonArrivePalier());
@@ -66,7 +77,6 @@ public class EvenementOuverturePorteCabine extends Evenement {
                         étage.getPassagers().remove(newPass);
                     }
                 }else if(newPass.sens() != oldIntention && !cabine.aDesPassagers() && !immeuble.passagerAuDessus(cabine.étage) && !immeuble.passagerEnDessous(cabine.étage)){
-                    //System.err.println("3");
                     if(cabine.faireMonterPassager(newPass)){
                         cabine.changerIntention(newPass.sens());
                         echeancier.supprimePAP(newPass.getEvenementPietonArrivePalier());
@@ -74,7 +84,6 @@ public class EvenementOuverturePorteCabine extends Evenement {
                         étage.getPassagers().remove(newPass);
                     }
                 } else if (étage.getPassagers().size() > 1 && étage.aPassagersMemeSansCabine(oldIntention)) {
-                    //System.err.println("4");
                     newPass = cabine.getFirstWithSameIntention(oldIntention);
                     if (newPass != null){
                         cabine.changerIntention(newPass.sens());
@@ -84,7 +93,6 @@ public class EvenementOuverturePorteCabine extends Evenement {
                         étage.getPassagers().remove(newPass);
                     }
                 } else{
-                    //System.err.println("5");
                     cabine.changerIntention(oldIntention);
                 }
             }
@@ -156,6 +164,10 @@ public class EvenementOuverturePorteCabine extends Evenement {
         }
 
         if (!modeParfait && cabine.aPassagersMontantEtDescendant()){
+            cabine.changerIntention(oldIntention);
+        }
+
+        if (modeParfait && immeuble.passagerEnDessous(étage) && immeuble.passagerAuDessus(étage) && !cabine.aDesPassagers()){
             cabine.changerIntention(oldIntention);
         }
 

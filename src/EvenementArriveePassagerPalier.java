@@ -33,6 +33,7 @@ public class EvenementArriveePassagerPalier extends Evenement {
 		    p.setEvenementPietonArrivePalier(epap);
 		    echeancier.ajouter(epap);
             if (c.étage == étage && c.porteOuverte) {
+                c.changerIntention(p.sens());
                 c.faireMonterPassager(p);
                 echeancier.supprimePAP(p.getEvenementPietonArrivePalier());
                 EvenementFermeturePorteCabine fpc = new EvenementFermeturePorteCabine(ancienneDate+Global.tempsPourEntrerOuSortirDeLaCabine+Global.tempsPourOuvrirOuFermerLesPortes);
